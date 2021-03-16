@@ -1,9 +1,14 @@
+"""
+This file is going to download all links in links.txt using parallel downloading.
+"""
+
 import multiprocessing
 import os
 import urllib.parse
 import urllib.request
 
 
+# This function split list to n lists
 def split_list_to_sub_list(input_list, number_sub_list):
     sub_lists = [[] for _ in range(number_sub_list)]
 
@@ -15,6 +20,7 @@ def split_list_to_sub_list(input_list, number_sub_list):
     return sub_lists
 
 
+# Download url
 def download_url(url, filename, output_dir=''):
     url_head = url[:url.find('//')]
     url_body = urllib.parse.unquote(url[url.find('//'):])
@@ -25,11 +31,13 @@ def download_url(url, filename, output_dir=''):
     return output
 
 
+# Download urls
 def download_urls(urls, filenames, output_dirs):
     for index in range(len(urls)):
         download_url(urls[index], filenames[index], output_dirs[index])
 
 
+# Parallel downloading urls
 def download_url_using_multi_processor(urls, filenames, output_dirs, cores=multiprocessing.cpu_count()):
     urls_sub_lists = split_list_to_sub_list(urls, cores)
     filenames_sub_lists = split_list_to_sub_list(filenames, cores)
@@ -48,6 +56,7 @@ def download_url_using_multi_processor(urls, filenames, output_dirs, cores=multi
         process.join()
 
 
+# Get name from url
 def get_name_from_url(url):
     url = url[url.rfind('/') + 1:]
     return urllib.parse.unquote(url)
