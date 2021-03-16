@@ -1,3 +1,4 @@
+import argparse
 import os
 import re
 
@@ -60,8 +61,12 @@ def pretty_url(_url):
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-u', '--url', help='Staring url',)
+    args = parser.parse_args()
+
     # Starting point for crawling
-    start_url = 'https://dl.songsara.net/FRE/'
+    start_url = args.url
     create_table()
     insert_url(start_url)
     counter = get_counter()
