@@ -4,9 +4,6 @@
 > With Downloader we can download all the links
 > stored in links.txt and store them to output folder.
 
-In this project, we create many functions that handle api requests. You can create user and submit post. Yoy can use
-front-end frameworks to complete your project.
-
 ## Installation
 
 - Clone the repository
