@@ -4,17 +4,18 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-from database import create_table, get_urls_length, get_counter, get_url_by_id, insert_url, url_exists, \
-    increment_counter
+from database import (create_table, get_urls_length, get_counter, get_url_by_id, insert_url, url_exists,
+                      increment_counter)
 
 
+# If this url has html content and does not responds 4* or 5* will return True else False
 def is_good_url(_url, domain):
     try:
         # remove /
         domain = domain[:-1] if domain.startswith('/') else domain
         if not _url or 'http' not in _url or not _url.startswith(domain):
             return False
-        _res = requests.head(_url,)
+        _res = requests.head(_url, )
         if str(_res.status_code).startswith('4') or str(_res.status_code).startswith('5'):
             return False
         if 'html' in _res.headers['Content-Type']:
@@ -23,16 +24,16 @@ def is_good_url(_url, domain):
         print(str(e))
         return False
     return False
-    # return True
 
 
+# If url has media, returns True else False.
 def is_media(_url, domain='', check_domain=True):
     try:
         # remove /
         domain = domain[:-1] if domain.startswith('/') else domain
         if check_domain and not _url or 'http' not in _url or not _url.startswith(domain):
             return False
-        _res = requests.head(_url,)
+        _res = requests.head(_url, )
         if str(_res.status_code).startswith('4') or str(_res.status_code).startswith('5'):
             return False
         if 'html' not in _res.headers['Content-Type']:
@@ -43,6 +44,7 @@ def is_media(_url, domain='', check_domain=True):
     return False
 
 
+# Remove url parameters
 def pretty_url(_url):
     _url = re.sub(r'([#?]).*?($)', '/', _url)
     if _url.startswith('https://'):
@@ -58,6 +60,7 @@ def pretty_url(_url):
 
 
 if __name__ == '__main__':
+    # Starting point for crawling
     start_url = 'https://dl.songsara.net/FRE/'
     create_table()
     insert_url(start_url)
@@ -67,7 +70,7 @@ if __name__ == '__main__':
         url = get_url_by_id(counter)
         print(f'len(urls) = {urls_length}, counter = {counter}')
         if is_good_url(url, start_url):
-            res = requests.get(url,)
+            res = requests.get(url, )
 
             if str(res.status_code).startswith('4') or str(res.status_code).startswith('5'):
                 print(f'status code {url} is {res.status_code}. crawler failed.')
